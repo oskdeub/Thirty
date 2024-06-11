@@ -7,13 +7,145 @@
     android:layout_height="match_parent"
     tools:context="view.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout
+        android:id="@+id/playingField"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout">
+
+      <GridLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:columnCount="3"
+          android:rowCount="2"
+          android:layout_gravity="center"
+          >
+
+          <ImageButton
+              android:id="@+id/dice1"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="0"
+              android:layout_row="0"
+              android:src="@drawable/white1"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+          <ImageButton
+              android:id="@+id/dice2"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="1"
+              android:layout_row="0"
+              android:src="@drawable/white2"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+
+          <ImageButton
+              android:id="@+id/dice3"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="2"
+              android:layout_row="0"
+              android:src="@drawable/white3"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+
+          <ImageButton
+              android:id="@+id/dice4"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="0"
+              android:layout_row="1"
+              android:src="@drawable/white4"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+
+          <ImageButton
+              android:id="@+id/dice5"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="1"
+              android:layout_row="1"
+              android:src="@drawable/white5"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+
+          <ImageButton
+              android:id="@+id/dice6"
+              android:layout_width="10dp"
+              android:layout_height="10dp"
+              android:layout_columnWeight="1"
+              android:layout_rowWeight="1"
+              android:layout_column="2"
+              android:layout_row="1"
+              android:src="@drawable/white6"
+              android:background="?android:attr/selectableItemBackground"
+              android:scaleType="centerInside"
+              android:adjustViewBounds="true"
+              android:layout_margin="8dp"
+              />
+      </GridLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:orientation="horizontal"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playingField"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Spinner
+            android:id="@+id/combinationSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            android:text="@string/choice_btn"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/buttonThrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Throw" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
