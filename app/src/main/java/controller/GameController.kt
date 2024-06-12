@@ -17,7 +17,7 @@ class GameController(private val gameView: GameView) {
         Dice(),
     )
     private var combinationMode: Boolean = false
-    private var combinationList: List<Combination> = listOf()
+    private var combinationList: MutableList<Combination> = mutableListOf()
     private var currentCombination: Combination = Combination()
     private fun resetDice(){
         for (dice in diceList) {
@@ -43,7 +43,8 @@ class GameController(private val gameView: GameView) {
     }
 
     private fun endRound() {
-        TODO("Not yet implemented")
+        gameView.updateMarkCombinationButtonEnabled(true)
+        gameView.updateThrowButtonEnabled(false)
     }
 
     private fun resetThrows() {
@@ -83,8 +84,14 @@ class GameController(private val gameView: GameView) {
     }
 
     fun combinationMode() {
-        combinationMode = true
-        currentCombination = Combination()
+        combinationMode = !combinationMode
+        gameView.updateMarkCombinationDisplay(combinationMode)
+        if(combinationMode){
+            currentCombination = Combination()
+        } else {
+            combinationList.add(currentCombination)
+            gameView.updateCombinationsList(combinationList)
+        }
     }
 
     fun handleCombinationSelect(selectedCombination: String?) {

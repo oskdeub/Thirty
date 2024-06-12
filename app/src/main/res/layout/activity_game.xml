@@ -137,23 +137,7 @@
                 />
         </GridLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/throws_left"
-                />
-            <TextView
-                android:id="@+id/throwsLeftText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/_3"
-                />
 
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -161,21 +145,51 @@
             android:gravity="center"
             android:orientation="vertical"
             >
-            <Button
-                android:id="@+id/buttonCombination"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/mark_combination" />
-
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/left_to_target" />
+                <TextView
+                    android:id="@+id/combinationTargetText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/_0" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+                <Button
+                    android:id="@+id/buttonCombination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mark_combination" />
+            </LinearLayout>
             <ListView
+                android:id="@+id/combinationListView"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp" />
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/combination_score"
+                />
+            <TextView
+                android:id="@+id/combinationScoreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/_0"
+                />
+        </LinearLayout>
     </LinearLayout>
-
-
-
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
@@ -185,41 +199,34 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playingField"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Spinner
-
             android:id="@+id/combinationSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
             android:text="@string/choice_btn"
             android:textColor="@color/black"
-            android:layout_marginStart="10dp"/>
-
+            android:layout_marginStart="10dp" />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
         <Button
+            android:id="@+id/buttonEndRound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="End Round"
-
-            />
-
+            android:text="@string/end_round" />
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
         <Button
             android:id="@+id/buttonThrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Throw"
+            android:text="@string/throwBtnText"
             android:layout_marginEnd="10dp"/>
     </LinearLayout>
 

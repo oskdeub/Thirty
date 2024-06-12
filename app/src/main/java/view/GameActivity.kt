@@ -1,17 +1,20 @@
 package view
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import controller.CombinationAdapter
 import controller.GameController
 import controller.GameView
 import model.Combination
@@ -20,11 +23,17 @@ import se.umu.cs.seod0005.thirty.R
 class GameActivity : AppCompatActivity(), GameView {
     private lateinit var gameController: GameController
     private lateinit var diceButtons: List<ImageButton>
+    private val combinationsList: MutableList<Combination> = mutableListOf()
+    private val combinationsAdapter = CombinationAdapter(this, combinationsList)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+
         gameController = GameController(this)
         gameController.startGame()
+
+
         setContentView(R.layout.activity_game)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.game)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -42,9 +51,11 @@ class GameActivity : AppCompatActivity(), GameView {
         }
 
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
+        combinationButton.isEnabled = false
         combinationButton.setOnClickListener {
             gameController.combinationMode()
         }
+
     }
 
     private fun initializeDiceButtons() {
@@ -81,6 +92,47 @@ class GameActivity : AppCompatActivity(), GameView {
                 // Handle the case where nothing is selected (if needed)
             }
         }
+
+        val listView = findViewById<ListView>(R.id.combinationListView)
+        listView.adapter = combinationsAdapter
+    }
+
+    override fun updateCombinationsList(combinations: MutableList<Combination>) {
+        combinationsList.clear()
+        combinationsList.addAll(combinations)
+        //Adepter implemented w/ Gemini
+        combinationsAdapter.notifyDataSetChanged()
+    }
+
+    override fun updateMarkCombinationDisplay(inCombinationMode: Boolean) {
+        val combinationButton = findViewById<Button>(R.id.buttonCombination)
+        combinationButton.text = if (inCombinationMode) "Done" else "New Combination"
+    }
+
+    override fun updateRoundScoreDisplay(roundScore: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateCombinationScoreDisplay(combinationScore: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateThrowButtonEnabled(enabled: Boolean) {
+        val throwButton = findViewById<Button>(R.id.buttonThrow)
+        throwButton.isEnabled = enabled
+    }
+
+    override fun updateMarkCombinationButtonEnabled(enabled: Boolean) {
+        val combinationButton = findViewById<Button>(R.id.buttonCombination)
+        combinationButton.isEnabled = enabled
+    }
+    override fun updateScoreDisplay(newScore: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun updateThrowsDisplay(throwsLeft: Int) {
+        val throwButton = findViewById<Button>(R.id.buttonThrow)
+        throwButton.text = "Throw ($throwsLeft)"
     }
 
     override fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean ){
@@ -124,13 +176,5 @@ class GameActivity : AppCompatActivity(), GameView {
         }
     }
 
-    override fun updateScoreDisplay(newScore: Int) {
-        TODO("Not yet implemented")
-    }
 
-    override fun updateThrowsDisplay(throwsLeft: Int) {
-        val throwsTextView = findViewById<TextView>(R.id.throwsLeftText)
-        throwsTextView.text = throwsLeft.toString()
-
-    }
 }
