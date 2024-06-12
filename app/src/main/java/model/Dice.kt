@@ -3,6 +3,7 @@ package model
 class Dice {
     var value: Int = 0
     var isSelected : Boolean = false
+    var inCombination : Boolean = false
 
     fun reset() {
         value = 0

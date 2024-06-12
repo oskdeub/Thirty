@@ -1,12 +1,13 @@
 package controller
 
 import android.util.Log
+import model.Combination
 import model.Game
 import model.Dice
 import model.Score
 import view.MainActivity
 class GameController(private val gameView: GameView) {
-    private var currentGame: Game? = null
+    private var currentGame: Game = Game()
     private val diceList: List<Dice> = listOf(
         Dice(),
         Dice(),
@@ -15,36 +16,78 @@ class GameController(private val gameView: GameView) {
         Dice(),
         Dice(),
     )
-    fun resetDice(){
+    private var combinationMode: Boolean = false
+    private var combinationList: List<Combination> = listOf()
+    private var currentCombination: Combination = Combination()
+    private fun resetDice(){
         for (dice in diceList) {
             dice.reset()
         }
     }
 
-    fun rollDice() {
-        for (dice in diceList){
-            if (!dice.isSelected){
-                dice.roll()
-                Log.d("Diceroll", "Dice${diceList.indexOf(dice) + 1} rolled: ${dice.value}")
-                gameView.updateDiceImage(diceList.indexOf(dice), dice.value, 1)
+   fun rollDice() {
+        if (currentGame.remainingThrows > 0) {
+            for (dice in diceList) {
+                if (!dice.isSelected && !dice.inCombination) {
+                    dice.roll()
+                    Log.d("Diceroll", "Dice${diceList.indexOf(dice) + 1} rolled: ${dice.value}")
+                    gameView.updateDiceImage(diceList.indexOf(dice), dice.value, false, dice.inCombination)
+                }
             }
+            currentGame.remainingThrows -= 1
+            gameView.updateThrowsDisplay(currentGame.remainingThrows)
+        }
+        if (currentGame.remainingThrows == 0) {
+            endRound()
         }
     }
+
+    private fun endRound() {
+        TODO("Not yet implemented")
+    }
+
+    private fun resetThrows() {
+        currentGame.remainingThrows = 3
+    }
     fun startGame() {
-        // TODO: Implement logic to start a new game
-        currentGame = Game()
         resetDice()
 
     }
-    fun handleCombinationSelected(selectedCombination: String?) {
-        // TODO: Implement logic to calc score and update game state
+    private fun handleDiceCombinationClick(i: Int) {
+        val dice = diceList[i]
+        if(!dice.inCombination) {
+            currentCombination.combination.add(dice.value)
+            dice.inCombination = true
+            gameView.updateDiceImage(i, dice.value, true, true)
+        }
+    }
+
+    private fun handleDiceSaveClick(i: Int) {
+        if (currentGame.remainingThrows < 3) {
+            val clickedDice = diceList[i]
+            clickedDice.isSelected = !clickedDice.isSelected
+            gameView.updateDiceImage(i, clickedDice.value, clickedDice.isSelected, clickedDice.inCombination)
+
+        }
     }
 
     fun handleDiceClick(i: Int) {
-        val clickedDice = diceList[i]
-        clickedDice.isSelected = !clickedDice.isSelected
+        if (combinationMode) {
+            handleDiceCombinationClick(i)
+            Log.d("Combination", "Dice${i + 1} added to currentCombination: ${currentCombination.combination}")
+            return
+        } else {
+            handleDiceSaveClick(i)
+            Log.d("Dice", "Dice${i + 1} saved: ${diceList[i].value}")
+        }
+    }
 
-        Log.d("Dice", "Dice${i + 1} rolled: ${clickedDice.value}")
+    fun combinationMode() {
+        combinationMode = true
+        currentCombination = Combination()
+    }
+
+    fun handleCombinationSelect(selectedCombination: String?) {
 
     }
 }
