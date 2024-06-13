@@ -9,7 +9,7 @@
     <string name="mark_combination">New Combination</string>
     <string name="end_round">End Round</string>
     <string name="throwBtnText">Throw (3)</string>
-    <string name="combination_score">"Combination Score: "</string>
+    <string name="combination_score">"Combinations Score: "</string>
     <string name="left_to_target">Left to target: </string>
     <string-array name="combinations">
         <item>Low</item>

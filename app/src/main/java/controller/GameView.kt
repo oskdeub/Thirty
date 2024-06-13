@@ -12,4 +12,5 @@ interface GameView {
     fun updateCombinationScoreDisplay(combinationScore: Int)
     fun updateThrowButtonEnabled(enabled: Boolean)
     fun updateMarkCombinationButtonEnabled(enabled: Boolean)
+
 }

@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -28,36 +29,26 @@ class GameActivity : AppCompatActivity(), GameView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-
         gameController = GameController(this)
         gameController.startGame()
-
-
         setContentView(R.layout.activity_game)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.game)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         initializeViews()
         initializeDiceButtons()
-
-
         val throwButton = findViewById<Button>(R.id.buttonThrow)
         throwButton.setOnClickListener {
             gameController.rollDice()
         }
-
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
         combinationButton.isEnabled = false
         combinationButton.setOnClickListener {
             gameController.combinationMode()
         }
-
     }
-
     private fun initializeDiceButtons() {
         diceButtons = listOf(
             findViewById<ImageButton>(R.id.dice1),
@@ -72,9 +63,7 @@ class GameActivity : AppCompatActivity(), GameView {
                 gameController.handleDiceClick(i) // Pass the index of the clicked die
             }
         }
-
     }
-
     private fun initializeViews() {
         val combinationSpinner = findViewById<Spinner>(R.id.combinationSpinner)
         val combinations = resources.getStringArray(R.array.combinations)
@@ -95,6 +84,14 @@ class GameActivity : AppCompatActivity(), GameView {
 
         val listView = findViewById<ListView>(R.id.combinationListView)
         listView.adapter = combinationsAdapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            // Handle the item click here
+            val clickedCombination = combinationsList[position]
+            Toast.makeText(this, "Removed combination: ${clickedCombination.combination}", Toast.LENGTH_SHORT).show()
+            //TODO: Removal of combination from list
+            gameController.removeCombination(clickedCombination)
+
+        }
     }
 
     override fun updateCombinationsList(combinations: MutableList<Combination>) {
@@ -114,7 +111,8 @@ class GameActivity : AppCompatActivity(), GameView {
     }
 
     override fun updateCombinationScoreDisplay(combinationScore: Int) {
-        TODO("Not yet implemented")
+        val combinationScoreText = findViewById<TextView>(R.id.combinationScoreText)
+        combinationScoreText.text = combinationScore.toString()
     }
 
     override fun updateThrowButtonEnabled(enabled: Boolean) {
@@ -126,6 +124,7 @@ class GameActivity : AppCompatActivity(), GameView {
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
         combinationButton.isEnabled = enabled
     }
+
     override fun updateScoreDisplay(newScore: Int) {
         TODO("Not yet implemented")
     }

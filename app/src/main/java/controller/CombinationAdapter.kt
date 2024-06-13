@@ -41,6 +41,8 @@ class CombinationAdapter(
         // Example:
         val combinationTextView = view.findViewById<TextView>(R.id.combinationTextView)
         combinationTextView.text = combination.combination.toString()
+        val combinationItemScoreText = view.findViewById<TextView>(R.id.combinationItemScoreText)
+        combinationItemScoreText.text = combination.score.toString()
 
         return view
     }
