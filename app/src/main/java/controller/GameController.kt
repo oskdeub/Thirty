@@ -91,6 +91,11 @@ class GameController(private val gameView: GameView) {
         resetThrows()
         gameView.updateThrowsDisplay(currentGame.remainingThrows)
         gameView.updateCombinationScoreDisplay(0)
+        gameView.updateMarkCombinationButtonEnabled(false)
+        gameView.updateThrowButtonEnabled(true)
+        gameView.updateEndRoundButtonEnabled(false)
+        combinationList.clear()
+        gameView.updateCombinationsList(combinationList)
         currentCombination = Combination()
 
     }
