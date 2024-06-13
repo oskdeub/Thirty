@@ -28,7 +28,6 @@ class Combination {
             scoreAtTarget = false
             return 0
         }
-
     }
 }
 

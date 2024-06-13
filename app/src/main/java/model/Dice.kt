@@ -8,6 +8,7 @@ class Dice {
     fun reset() {
         value = 0
         isSelected = false
+        inCombination = false
     }
 
     fun roll(){

@@ -5,7 +5,7 @@ import model.Combination
 import model.Game
 import model.Dice
 import model.Score
-import view.MainActivity
+import view.GameActivity
 
 class GameController(private val gameView: GameView) {
     private var currentGame: Game = Game()
@@ -25,6 +25,7 @@ class GameController(private val gameView: GameView) {
     private fun resetDice() {
         for (dice in diceList) {
             dice.reset()
+            gameView.updateDiceImage(diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
         }
     }
 
@@ -41,21 +42,67 @@ class GameController(private val gameView: GameView) {
             gameView.updateThrowsDisplay(currentGame.remainingThrows)
         }
         if (currentGame.remainingThrows == 0) {
-            endRound()
+            combinationStage()
         }
     }
 
-    private fun endRound() {
+    private fun combinationStage() {
         gameView.updateMarkCombinationButtonEnabled(true)
         gameView.updateThrowButtonEnabled(false)
+        gameView.updateEndRoundButtonEnabled(true)
+
+    }
+
+    fun endRound(){
+        addScoreToCurrentGame(currentRoundScore)
+        currentGame.score.totalScore += currentRoundScore
+        gameView.updateScoreDisplay(currentGame.score.totalScore)
+        if (targetScore == 3) {
+            gameView.removeCombinationFromSpinner("Low")
+        } else {
+            gameView.removeCombinationFromSpinner(targetScore.toString())
+        }
+        resetRound()
+        startRound()
+    }
+
+    private fun addScoreToCurrentGame(currentRoundScore: Int) {
+        when (targetScore) {
+            3 -> { currentGame.score.low = currentRoundScore }
+            4 -> { currentGame.score.four = currentRoundScore }
+            5 -> { currentGame.score.five = currentRoundScore }
+            6 -> { currentGame.score.six = currentRoundScore }
+            7 -> { currentGame.score.seven = currentRoundScore }
+            8 -> { currentGame.score.eight = currentRoundScore }
+            9 -> { currentGame.score.nine = currentRoundScore }
+            10 -> { currentGame.score.ten = currentRoundScore }
+            11 -> { currentGame.score.eleven = currentRoundScore }
+            12 -> { currentGame.score.twelve = currentRoundScore }
+        }
     }
 
     private fun resetThrows() {
         currentGame.remainingThrows = 3
     }
 
-    fun startGame() {
+    private fun resetRound(){
+        currentRoundScore = 0
         resetDice()
+        resetThrows()
+        gameView.updateThrowsDisplay(currentGame.remainingThrows)
+        gameView.updateCombinationScoreDisplay(0)
+        currentCombination = Combination()
+
+    }
+
+    private fun startRound(){
+        currentGame.currentRound += 1
+        gameView.updateRoundNumberDisplay(currentGame.currentRound)
+        resetDice()
+    }
+
+    fun startGame() {
+        startRound()
 
     }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">thirty</string>
     <string name="choice_btn">Combination</string>
-    <string name="score">Total Score: </string>
+    <string name="score">Score: </string>
     <string name="_0">0</string>
     <string name="throws_left">Throws left: </string>
     <string name="_3">3</string>
@@ -11,6 +11,8 @@
     <string name="throwBtnText">Throw (3)</string>
     <string name="combination_score">"Combinations Score: "</string>
     <string name="left_to_target">Left to target: </string>
+    <string name="round">"Round "</string>
+    <string name="_1">1</string>
     <string-array name="combinations">
         <item>Low</item>
         <item>4</item>
