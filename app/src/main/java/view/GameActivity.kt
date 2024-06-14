@@ -122,10 +122,6 @@ class GameActivity : AppCompatActivity(), GameView {
         combinationButton.text = if (inCombinationMode) "Done" else "New Combination"
     }
 
-    override fun updateRoundScoreDisplay(roundScore: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun updateCombinationScoreDisplay(combinationScore: Int) {
         val combinationScoreText = findViewById<TextView>(R.id.combinationScoreText)
         combinationScoreText.text = combinationScore.toString()
@@ -161,47 +157,55 @@ class GameActivity : AppCompatActivity(), GameView {
         val throwButtonText = "Throw ($throwsLeft)"
         throwButton.text = throwButtonText
     }
-
+    private fun setDiceCombinationImage(diceIndex: Int, diceValue: Int) {
+        val imageResource = when (diceValue) {
+            1 -> R.drawable.red1
+            2 -> R.drawable.red2
+            3 -> R.drawable.red3
+            4 -> R.drawable.red4
+            5 -> R.drawable.red5
+            6 -> R.drawable.red6
+            else -> R.drawable.red1 // Default to a placeholder image if the value is invalid
+        }
+        diceButtons[diceIndex].setImageResource(imageResource)
+    }
+    private fun setDiceImage(diceIndex: Int, diceValue: Int) {
+        val imageResource = when (diceValue) {
+            1 -> R.drawable.white1
+            2 -> R.drawable.white2
+            3 -> R.drawable.white3
+            4 -> R.drawable.white4
+            5 -> R.drawable.white5
+            6 -> R.drawable.white6
+            else -> R.drawable.white1 // Default to a placeholder image if the value is invalid
+        }
+        diceButtons[diceIndex].setImageResource(imageResource)
+    }
+    private fun setDiceSelectedImage(diceIndex: Int, diceValue: Int){
+        val imageResource = when (diceValue) {
+            1 -> R.drawable.grey1
+            2 -> R.drawable.grey2
+            3 -> R.drawable.grey3
+            4 -> R.drawable.grey4
+            5 -> R.drawable.grey5
+            6 -> R.drawable.grey6
+            else -> R.drawable.grey1 // Default to a placeholder image if the value is invalid
+        }
+        diceButtons[diceIndex].setImageResource(imageResource)
+    }
     override fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean ){
 
         if (inCombination){
-            val imageResource = when (diceValue) {
-                1 -> R.drawable.red1
-                2 -> R.drawable.red2
-                3 -> R.drawable.red3
-                4 -> R.drawable.red4
-                5 -> R.drawable.red5
-                6 -> R.drawable.red6
-                else -> R.drawable.red1 // Default to a placeholder image if the value is invalid
-            }
-            diceButtons[diceIndex].setImageResource(imageResource)
+            setDiceCombinationImage(diceIndex, diceValue);
             return
         }
         if (!selected){
-            val imageResource = when (diceValue) {
-                1 -> R.drawable.white1
-                2 -> R.drawable.white2
-                3 -> R.drawable.white3
-                4 -> R.drawable.white4
-                5 -> R.drawable.white5
-                6 -> R.drawable.white6
-                else -> R.drawable.white1 // Default to a placeholder image if the value is invalid
-            }
-            diceButtons[diceIndex].setImageResource(imageResource)
+            setDiceImage(diceIndex, diceValue);
+            return
 
         } else {
-            val imageResource = when (diceValue) {
-                1 -> R.drawable.grey1
-                2 -> R.drawable.grey2
-                3 -> R.drawable.grey3
-                4 -> R.drawable.grey4
-                5 -> R.drawable.grey5
-                6 -> R.drawable.grey6
-                else -> R.drawable.grey1 // Default to a placeholder image if the value is invalid
-            }
-            diceButtons[diceIndex].setImageResource(imageResource)
+            setDiceSelectedImage(diceIndex, diceValue)
+            return
         }
     }
-
-
 }

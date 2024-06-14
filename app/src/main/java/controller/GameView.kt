@@ -8,7 +8,6 @@ interface GameView {
     fun updateThrowsDisplay(throwsLeft: Int)
     fun updateCombinationsList(combinations: MutableList<Combination>)
     fun updateMarkCombinationDisplay(inCombinationMode: Boolean)
-    fun updateRoundScoreDisplay(roundScore: Int)
     fun updateCombinationScoreDisplay(combinationScore: Int)
     fun updateThrowButtonEnabled(enabled: Boolean)
     fun updateMarkCombinationButtonEnabled(enabled: Boolean)
