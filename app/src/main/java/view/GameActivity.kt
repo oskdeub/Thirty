@@ -1,10 +1,8 @@
 package view
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ListView
@@ -48,12 +46,12 @@ class GameActivity : AppCompatActivity(), GameView {
 
         val throwButton = findViewById<Button>(R.id.buttonThrow)
         throwButton.setOnClickListener {
-            gameController.rollDice()
+            gameController.handleThrowButtonClick()
         }
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
         combinationButton.isEnabled = false
         combinationButton.setOnClickListener {
-            gameController.combinationMode()
+            gameController.handleCombinationButtonClick()
         }
         val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
         endRoundButton.isEnabled = false
@@ -101,7 +99,7 @@ class GameActivity : AppCompatActivity(), GameView {
             // Handle the item click here
             val clickedCombination = combinationsList[position]
             Toast.makeText(this, "Removed combination: ${clickedCombination.combination}", Toast.LENGTH_SHORT).show()
-            gameController.removeCombination(clickedCombination)
+            gameController.handleRemoveCombinationClick(clickedCombination)
         }
     }
     override fun removeCombinationFromSpinner(combination: String) {
