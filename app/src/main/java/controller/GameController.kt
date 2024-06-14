@@ -8,25 +8,18 @@ import model.Dice
 class GameController(private val gameView: GameView) {
     private var currentGame: Game = Game()
     private val diceList: List<Dice> = listOf(
-        Dice(),
-        Dice(),
-        Dice(),
-        Dice(),
-        Dice(),
-        Dice(),
+        Dice(), //Dice1
+        Dice(), //Dice2
+        Dice(), //Dice3
+        Dice(), //Dice4
+        Dice(), //Dice5
+        Dice(), //Dice6
     )
     private var combinationMode: Boolean = false
     private var combinationList: MutableList<Combination> = mutableListOf()
     private var currentCombination: Combination = Combination()
     private var targetScore: Int = 0
     private var currentRoundScore: Int = 0
-
-    private fun resetDice() {
-        for (dice in diceList) {
-            dice.reset()
-            updateDiceImage(diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
-        }
-    }
 
     fun handleThrowButtonClick() {
         if (currentGame.remainingThrows > 0) {
@@ -39,27 +32,9 @@ class GameController(private val gameView: GameView) {
         }
     }
 
-    private fun rollDice() {
-        for (dice in diceList) {
-            if (!dice.isSelected && !dice.inCombination) {
-                dice.roll()
-                Log.d("Diceroll", "Dice${diceList.indexOf(dice) + 1} rolled: ${dice.value}")
-                gameView.updateDiceImage(
-                    diceList.indexOf(dice), dice.value, false, dice.inCombination
-                )
-            }
-        }
-    }
-
-    private fun updateThrowsDisplay() {
-        gameView.updateThrowsDisplay(currentGame.remainingThrows)
-    }
-
-    private fun setCombinationStageDisplay() {
-        gameView.updateMarkCombinationButtonEnabled(true)
-        gameView.updateThrowButtonEnabled(false)
-        gameView.updateEndRoundButtonEnabled(true)
-    }
+    /****************************************
+     **             Round Logic            **
+     ****************************************/
 
     fun endRound() {
         addScoreToCurrentGame(currentRoundScore)
@@ -70,64 +45,8 @@ class GameController(private val gameView: GameView) {
         startRound()
     }
 
-    private fun removeUsedCombination() {
-        if (targetScore == 3) {
-            gameView.removeCombinationFromSpinner("Low")
-        } else {
-            gameView.removeCombinationFromSpinner(targetScore.toString())
-        }
-    }
-
-    private fun updateScoreDisplay() {
-        gameView.updateScoreDisplay(currentGame.score.totalScore)
-    }
-
     private fun addRoundScoreToTotalScore() {
         currentGame.score.totalScore += currentRoundScore
-    }
-
-    private fun addScoreToCurrentGame(currentRoundScore: Int) {
-        when (targetScore) {
-            3 -> {
-                currentGame.score.low = currentRoundScore
-            }
-
-            4 -> {
-                currentGame.score.four = currentRoundScore
-            }
-
-            5 -> {
-                currentGame.score.five = currentRoundScore
-            }
-
-            6 -> {
-                currentGame.score.six = currentRoundScore
-            }
-
-            7 -> {
-                currentGame.score.seven = currentRoundScore
-            }
-
-            8 -> {
-                currentGame.score.eight = currentRoundScore
-            }
-
-            9 -> {
-                currentGame.score.nine = currentRoundScore
-            }
-
-            10 -> {
-                currentGame.score.ten = currentRoundScore
-            }
-
-            11 -> {
-                currentGame.score.eleven = currentRoundScore
-            }
-
-            12 -> {
-                currentGame.score.twelve = currentRoundScore
-            }
-        }
     }
 
     private fun resetThrows() {
@@ -142,43 +61,36 @@ class GameController(private val gameView: GameView) {
         currentCombination = Combination()
     }
 
-    private fun setResetRoundDisplays() {
-        gameView.updateThrowsDisplay(currentGame.remainingThrows)
-        gameView.updateCombinationScoreDisplay(0)
-        gameView.updateMarkCombinationButtonEnabled(false)
-        gameView.updateThrowButtonEnabled(true)
-        gameView.updateEndRoundButtonEnabled(false)
-        combinationList.clear()
-        gameView.updateCombinationsList(combinationList)
-    }
-
     private fun startRound() {
         currentGame.currentRound += 1
-        gameView.updateRoundNumberDisplay(currentGame.currentRound)
+        updateRoundNumberDisplay()
         resetDice()
     }
 
     fun startGame() {
         startRound()
-
     }
 
-    private fun handleDiceCombinationClick(index: Int) {
-        val dice = diceList[index]
-        if (!dice.inCombination) {
-            currentCombination.addToCombinationAndScore(dice.value, index)
-            Log.d(
-                "Combination",
-                "Dice${index + 1} added to currentCombination: ${dice.value}, Indecies: ${currentCombination.diceIndecies}"
-            )
-            dice.inCombination = true
-            updateDiceImage(index, dice.value, true, true)
+    /****************************************
+     **             Dice Logic             **
+     ****************************************/
+
+    private fun rollDice() {
+        for (dice in diceList) {
+            if (!dice.isSelected && !dice.inCombination) {
+                dice.roll()
+                Log.d("DiceRoll", "Dice${diceList.indexOf(dice) + 1} rolled: ${dice.value}")
+                gameView.updateDiceImage(
+                    diceList.indexOf(dice), dice.value, false, dice.inCombination
+                )
+            }
         }
     }
-
-    private fun updateDiceImage(index: Int, value: Int, isSelected: Boolean, inCombination: Boolean
-    ) {
-        gameView.updateDiceImage(index, value, isSelected, inCombination)
+    private fun resetDice() {
+        for (dice in diceList) {
+            dice.reset()
+            updateDiceImage(diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
+        }
     }
 
     private fun handleDiceSaveClick(index: Int) {
@@ -205,22 +117,23 @@ class GameController(private val gameView: GameView) {
             Log.d("Dice", "Dice${index + 1} saved: ${diceList[index].value}")
         }
     }
+    private fun resetDiceStatus(dice: Dice) {
+        dice.inCombination = false
+        dice.isSelected = false
+        updateDiceImage(diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
+    }
 
     private fun updateCurrentRoundScore() {
         currentRoundScore = 0
         for (combination in combinationList) {
             currentRoundScore += combination.calculateScoreForTarget(targetScore)
         }
-        updateCombinationScoreDisplay(currentRoundScore)
+        updateCombinationScoreDisplay()
     }
 
-    private fun updateCombinationScoreDisplay(score: Int) {
-        gameView.updateCombinationScoreDisplay(score)
-    }
-
-    private fun toggleCombinationDisplay() {
-        gameView.updateMarkCombinationDisplay(combinationMode)
-    }
+    /****************************************
+     **       Combination Logic            **
+     ****************************************/
 
     fun handleCombinationButtonClick() {
         toggleCombinationMode()
@@ -228,6 +141,18 @@ class GameController(private val gameView: GameView) {
             startNewCombination()
         } else {
             addCombinationToCombinationList(currentCombination)
+        }
+    }
+    private fun handleDiceCombinationClick(index: Int) {
+        val dice = diceList[index]
+        if (!dice.inCombination) {
+            currentCombination.addToCombinationAndScore(dice.value, index)
+            Log.d(
+                "Combination",
+                "Dice${index + 1} added to currentCombination: ${dice.value}, Indecies: ${currentCombination.diceIndecies}"
+            )
+            dice.inCombination = true
+            updateDiceImage(index, dice.value, dice.isSelected, dice.inCombination)
         }
     }
 
@@ -244,9 +169,30 @@ class GameController(private val gameView: GameView) {
         if (combination.score > 0) {
             combinationList.add(combination)
             currentRoundScore += combination.calculateScoreForTarget(targetScore)
-            updateCombinationScoreDisplay(currentRoundScore)
-            gameView.updateCombinationsList(combinationList)
+            updateCombinationScoreDisplay()
+            updateCombinationsList()
         } //Else throw away combination?
+    }
+
+    fun handleRemoveCombinationClick(clickedCombination: Combination) {
+        removeCombinationFromCombinationList(clickedCombination)
+        updateCombinationsList()
+        Log.d("Combination", "Combination removed: $clickedCombination")
+    }
+    private fun removeUsedCombination() {
+        if (targetScore == 3) {
+            removeCombinationFromSpinner("Low")
+        } else {
+            removeCombinationFromSpinner(targetScore.toString())
+        }
+    }
+    private fun removeCombinationFromCombinationList(combination: Combination) {
+        combinationList.remove(combination)
+        updateCurrentRoundScore()
+        updateCombinationsList()
+        for (diceIndex in combination.diceIndecies) {
+            resetDiceStatus(diceList[diceIndex])
+        }
     }
 
     fun handleCombinationSelect(selectedCombination: String?) {
@@ -297,29 +243,97 @@ class GameController(private val gameView: GameView) {
         }
         updateCurrentRoundScore()
     }
+    private fun addScoreToCurrentGame(currentRoundScore: Int) {
+        when (targetScore) {
+            3 -> {
+                currentGame.score.low = currentRoundScore
+            }
 
-    fun handleRemoveCombinationClick(clickedCombination: Combination) {
-        removeCombinationFromCombinationList(clickedCombination)
-        updateCombinationsList()
-        Log.d("Combination", "Combination removed: $clickedCombination")
-    }
+            4 -> {
+                currentGame.score.four = currentRoundScore
+            }
 
-    private fun removeCombinationFromCombinationList(combination: Combination) {
-        combinationList.remove(combination)
-        updateCurrentRoundScore()
-        updateCombinationsList()
-        for (diceIndex in combination.diceIndecies) {
-            resetDiceStatus(diceList[diceIndex])
+            5 -> {
+                currentGame.score.five = currentRoundScore
+            }
+
+            6 -> {
+                currentGame.score.six = currentRoundScore
+            }
+
+            7 -> {
+                currentGame.score.seven = currentRoundScore
+            }
+
+            8 -> {
+                currentGame.score.eight = currentRoundScore
+            }
+
+            9 -> {
+                currentGame.score.nine = currentRoundScore
+            }
+
+            10 -> {
+                currentGame.score.ten = currentRoundScore
+            }
+
+            11 -> {
+                currentGame.score.eleven = currentRoundScore
+            }
+
+            12 -> {
+                currentGame.score.twelve = currentRoundScore
+            }
         }
     }
 
-    private fun resetDiceStatus(dice: Dice) {
-        dice.inCombination = false
-        dice.isSelected = false
-        updateDiceImage(diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
-    }
+    /****************************************
+     **         gameView functions         **
+     ****************************************/
 
+    private fun updateDiceImage(index: Int, value: Int, isSelected: Boolean, inCombination: Boolean) {
+        gameView.updateDiceImage(index, value, isSelected, inCombination)
+    }
+    private fun setResetRoundDisplays() {
+        gameView.updateThrowsDisplay(currentGame.remainingThrows)
+        gameView.updateCombinationScoreDisplay(0)
+        gameView.updateMarkCombinationButtonEnabled(false)
+        gameView.updateThrowButtonEnabled(true)
+        gameView.updateEndRoundButtonEnabled(false)
+        combinationList.clear()
+        gameView.updateCombinationsList(combinationList)
+    }
     private fun updateCombinationsList() {
         gameView.updateCombinationsList(combinationList)
+    }
+
+    private fun updateThrowsDisplay() {
+        gameView.updateThrowsDisplay(currentGame.remainingThrows)
+    }
+
+    private fun setCombinationStageDisplay() {
+        gameView.updateMarkCombinationButtonEnabled(true)
+        gameView.updateThrowButtonEnabled(false)
+        gameView.updateEndRoundButtonEnabled(true)
+    }
+
+    private fun updateCombinationScoreDisplay() {
+        gameView.updateCombinationScoreDisplay(currentRoundScore)
+    }
+
+    private fun toggleCombinationDisplay() {
+        gameView.updateMarkCombinationDisplay(combinationMode)
+    }
+
+    private fun removeCombinationFromSpinner(combination: String) {
+        gameView.removeCombinationFromSpinner(combination)
+    }
+
+    private fun updateScoreDisplay() {
+        gameView.updateScoreDisplay(currentGame.score.totalScore)
+    }
+
+    private fun updateRoundNumberDisplay() {
+        gameView.updateRoundNumberDisplay(currentGame.currentRound)
     }
 }
