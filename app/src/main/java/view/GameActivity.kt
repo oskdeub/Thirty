@@ -158,7 +158,8 @@ class GameActivity : AppCompatActivity(), GameView {
 
     override fun updateThrowsDisplay(throwsLeft: Int) {
         val throwButton = findViewById<Button>(R.id.buttonThrow)
-        throwButton.text = "Throw ($throwsLeft)"
+        val throwButtonText = "Throw ($throwsLeft)"
+        throwButton.text = throwButtonText
     }
 
     override fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean ){
