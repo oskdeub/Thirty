@@ -6,21 +6,6 @@ import model.Game
 import model.Dice
 
 class GameController(private val gameView: GameView, private val gameState: Game) {
-    /*
-    private val diceList: List<Dice> = listOf(
-        Dice(), //Dice1
-        Dice(), //Dice2
-        Dice(), //Dice3
-        Dice(), //Dice4
-        Dice(), //Dice5
-        Dice(), //Dice6
-    )
-    private var combinationMode: Boolean = false
-    private var combinationList: MutableList<Combination> = mutableListOf()
-    private var currentCombination: Combination = Combination()
-    private var targetScore: Int = 0
-    private var currentRoundScore: Int = 0
-    */
     fun handleThrowButtonClick() {
         if (gameState.remainingThrows > 0) {
             rollDice()
@@ -41,6 +26,9 @@ class GameController(private val gameView: GameView, private val gameState: Game
         addRoundScoreToTotalScore()
         updateScoreDisplay()
         removeUsedCombination()
+        if(gameState.currentRound == 10){
+            gameView.endGame(gameState.score)
+        }
         resetRound()
         startRound()
     }
@@ -63,7 +51,6 @@ class GameController(private val gameView: GameView, private val gameState: Game
             setCombinationStageDisplay()
         }
     }
-
 
     private fun addRoundScoreToTotalScore() {
         gameState.score.totalScore += gameState.currentRoundScore

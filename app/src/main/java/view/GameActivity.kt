@@ -1,5 +1,6 @@
 package view
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.view.View
@@ -22,6 +23,7 @@ import controller.GameController
 import controller.GameView
 import model.Combination
 import model.Game
+import model.Score
 import se.umu.cs.seod0005.thirty.R
 
 class GameActivity : AppCompatActivity(), GameView {
@@ -47,8 +49,6 @@ class GameActivity : AppCompatActivity(), GameView {
         initializeDiceButtons()
 
         gameState = ViewModelProvider(this)[Game::class.java]
-
-
         gameController = GameController(this, gameState)
 
         if (savedInstanceState == null) {
@@ -56,10 +56,6 @@ class GameActivity : AppCompatActivity(), GameView {
         } else {
             gameController.restoreGame(gameState)
         }
-
-
-
-
     }
 
     override fun onSaveInstanceState(outState: Bundle){
@@ -150,6 +146,15 @@ class GameActivity : AppCompatActivity(), GameView {
         val spinnerAdapter = CombinationSpinnerAdapter(this, android.R.layout.simple_spinner_item, spinnerItems)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         combinationSpinner.adapter = spinnerAdapter
+    }
+
+    override fun endGame(score : Score) {
+        val intent = Intent(this, ResultActivity::class.java)
+
+        val scoreArray = score.toIntArray()
+        intent.putExtra("scoreArray", scoreArray)
+
+        startActivity(intent)
     }
 
     override fun updateCombinationsList(combinations: MutableList<Combination>) {

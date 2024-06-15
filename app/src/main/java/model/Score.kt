@@ -12,4 +12,8 @@ class Score {
     var ten = 0;
     var eleven = 0;
     var twelve = 0;
+
+    fun toIntArray(): IntArray {
+        return intArrayOf(low, four, five, six, seven, eight, nine, ten, eleven, twelve)
+    }
 }
