@@ -6,16 +6,7 @@ import model.Game
 import model.Dice
 
 class GameController(private val gameView: GameView, private val gameState: Game) {
-    fun handleThrowButtonClick() {
-        if (gameState.remainingThrows > 0) {
-            rollDice()
-            gameState.remainingThrows -= 1
-            updateThrowsDisplay()
-        }
-        if (gameState.remainingThrows == 0) {
-            setCombinationStageDisplay()
-        }
-    }
+
 
     /****************************************
      **             Round Logic            **
@@ -77,12 +68,19 @@ class GameController(private val gameView: GameView, private val gameState: Game
     fun startGame() {
         startRound()
     }
-
     /****************************************
      **             Dice Logic             **
      ****************************************/
-    //TODO: Toggle combination on click.
-    //TODO: Removed combinations should return selected status to dice.
+    fun handleThrowButtonClick() {
+        if (gameState.remainingThrows > 0) {
+            rollDice()
+            gameState.remainingThrows -= 1
+            updateThrowsDisplay()
+        }
+        if (gameState.remainingThrows == 0) {
+            setCombinationStageDisplay()
+        }
+    }
     private fun rollDice() {
         for (dice in gameState.diceList) {
             if (!dice.isSelected && !dice.inCombination) {
@@ -127,7 +125,6 @@ class GameController(private val gameView: GameView, private val gameState: Game
     }
     private fun resetDiceStatus(dice: Dice) {
         dice.inCombination = false
-        dice.isSelected = false
         updateDiceImage(gameState.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
     }
 
@@ -161,6 +158,9 @@ class GameController(private val gameView: GameView, private val gameState: Game
             )
             dice.inCombination = true
             updateDiceImage(index, dice.value, dice.isSelected, dice.inCombination)
+        } else {
+            gameState.currentCombination.removeFromCombinationAndScore(dice.value, index)
+            resetDiceStatus(dice)
         }
     }
 

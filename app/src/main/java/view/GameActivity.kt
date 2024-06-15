@@ -71,7 +71,6 @@ class GameActivity : AppCompatActivity(), GameView {
 
     }
 
-    //TODO: HANDLE ROTATION
     private fun initializeDiceButtons() {
         diceButtons = listOf(
             findViewById<ImageButton>(R.id.dice1),

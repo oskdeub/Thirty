@@ -29,5 +29,11 @@ class Combination {
             return 0
         }
     }
+
+    fun removeFromCombinationAndScore(value: Int, index: Int) {
+        combination.remove(value)
+        diceIndecies.remove(index)
+        score -= value
+    }
 }
 

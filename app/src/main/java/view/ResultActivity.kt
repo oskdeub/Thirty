@@ -25,6 +25,8 @@ class ResultActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //TODO: Place Try Again button at bottom of screen
+        //TODO: Move Result Text to top of screen
 
         val scoreArray = intent.getIntArrayExtra("scoreArray")!!
         Log.d("scoreArray", scoreArray.toString())
@@ -45,6 +47,5 @@ class ResultActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-
     }
 }
