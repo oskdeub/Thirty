@@ -27,11 +27,17 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //val intarray = intArrayOf(10,15,20,25,10,15,20,25,10,30)
+
 
         val startButton = findViewById<Button>(R.id.buttonStart)
         startButton.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
+
+            //val intent = Intent(this, ResultActivity::class.java)
+            //intent.putExtra("scoreArray", intarray)
+            //startActivity(intent)
         }
 
     }
