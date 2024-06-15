@@ -58,20 +58,7 @@ class GameActivity : AppCompatActivity(), GameView {
         }
 
 
-        val throwButton = findViewById<Button>(R.id.buttonThrow)
-        throwButton.setOnClickListener {
-            gameController.handleThrowButtonClick()
-        }
-        val combinationButton = findViewById<Button>(R.id.buttonCombination)
-        combinationButton.isEnabled = false
-        combinationButton.setOnClickListener {
-            gameController.handleCombinationButtonClick()
-        }
-        val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
-        endRoundButton.isEnabled = false
-        endRoundButton.setOnClickListener {
-            gameController.endRound()
-        }
+
 
     }
 
@@ -130,6 +117,22 @@ class GameActivity : AppCompatActivity(), GameView {
             Toast.makeText(this, "Removed combination: ${clickedCombination.combination}", Toast.LENGTH_SHORT).show()
             gameController.handleRemoveCombinationClick(clickedCombination)
         }
+
+        val throwButton = findViewById<Button>(R.id.buttonThrow)
+        throwButton.setOnClickListener {
+            gameController.handleThrowButtonClick()
+        }
+        val combinationButton = findViewById<Button>(R.id.buttonCombination)
+        combinationButton.isEnabled = false
+        combinationButton.setOnClickListener {
+            gameController.handleCombinationButtonClick()
+        }
+        val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
+        endRoundButton.isEnabled = false
+        endRoundButton.setOnClickListener {
+            gameController.endRound()
+        }
+
     }
     override fun removeCombinationFromSpinner(combination: String) {
         spinnerItems.remove(combination)

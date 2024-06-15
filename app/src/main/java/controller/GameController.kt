@@ -46,6 +46,7 @@ class GameController(private val gameView: GameView, private val gameState: Game
     }
 
     fun restoreGame(state : Game){
+        Log.d("RestoreGame", "${state.currentRound}, ${state.currentRoundScore}, ${state.remainingThrows}, ${state.combinationMode},")
         gameState.load(state)
         updateCurrentRoundScore()
         updateThrowsDisplay()
@@ -53,14 +54,16 @@ class GameController(private val gameView: GameView, private val gameState: Game
         updateScoreDisplay()
         updateRoundNumberDisplay()
         updateCombinationsList()
-        if(gameState.remainingThrows == 0){
-            setCombinationStageDisplay()
-        }
+        Log.d("gameState", "${state.remainingThrows}, ${state.combinationMode}")
         setCombinationStringList()
         for(dice in gameState.diceList){
             updateDiceImage(gameState.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
         }
+        if(gameState.remainingThrows == 0){
+            setCombinationStageDisplay()
+        }
     }
+
 
     private fun addRoundScoreToTotalScore() {
         gameState.score.totalScore += gameState.currentRoundScore
@@ -91,7 +94,8 @@ class GameController(private val gameView: GameView, private val gameState: Game
     /****************************************
      **             Dice Logic             **
      ****************************************/
-
+    //TODO: Toggle combination on click.
+    //TODO: Removed combinations should return selected status to dice.
     private fun rollDice() {
         for (dice in gameState.diceList) {
             if (!dice.isSelected && !dice.inCombination) {
