@@ -14,4 +14,5 @@ interface GameView {
     fun updateEndRoundButtonEnabled(enabled: Boolean)
     fun updateRoundNumberDisplay(roundNumber: Int)
     fun removeCombinationFromSpinner(combination: String)
+    fun setCombinationSpinnerItems(combinations: MutableList<String>)
 }
