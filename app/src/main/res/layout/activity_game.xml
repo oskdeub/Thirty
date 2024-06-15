@@ -8,7 +8,9 @@
     android:layout_margin="8dp"
     tools:context="view.GameActivity">
 
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/playingField"
@@ -167,31 +169,30 @@
                 />
         </GridLayout>
 
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical"
-            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/buttonCombination"
-                    android:layout_width="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/mark_combination" />
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <Button
+                        android:id="@+id/buttonCombination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_combination" />
+                </LinearLayout>
+                <ListView
+                    android:id="@+id/combinationListView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp" />
             </LinearLayout>
-            <ListView
-                android:id="@+id/combinationListView"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp" />
-        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -200,21 +201,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/combination_score"
+                android:textSize="16sp"
                 />
             <TextView
                 android:id="@+id/combinationScoreText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/_0"
+                android:textSize="20sp"
                 />
         </LinearLayout>
     </LinearLayout>
+</ScrollView>
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playingField"
         app:layout_constraintStart_toStartOf="parent"
@@ -228,10 +231,6 @@
             android:text="@string/choice_btn"
             android:textColor="@color/black"
             android:layout_marginStart="10dp" />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
         <Button
             android:id="@+id/buttonEndRound"
             android:layout_width="wrap_content"

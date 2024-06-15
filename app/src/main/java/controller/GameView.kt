@@ -1,6 +1,7 @@
 package controller
 
 import model.Combination
+import model.Score
 
 interface GameView {
     fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean)
@@ -14,4 +15,6 @@ interface GameView {
     fun updateEndRoundButtonEnabled(enabled: Boolean)
     fun updateRoundNumberDisplay(roundNumber: Int)
     fun removeCombinationFromSpinner(combination: String)
+    fun setCombinationSpinnerItems(combinations: MutableList<String>)
+    fun endGame(score : Score)
 }

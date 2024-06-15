@@ -1,6 +1,8 @@
 package view
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
@@ -10,23 +12,28 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import controller.CombinationAdapter
 import controller.CombinationSpinnerAdapter
 import controller.GameController
 import controller.GameView
 import model.Combination
+import model.Game
+import model.Score
 import se.umu.cs.seod0005.thirty.R
 
 class GameActivity : AppCompatActivity(), GameView {
+    private lateinit var gameState : Game
     private lateinit var gameController: GameController
     private lateinit var diceButtons: List<ImageButton>
     private lateinit var combinationSpinner: Spinner
     private val combinationsList: MutableList<Combination> = mutableListOf()
     private val combinationsAdapter = CombinationAdapter(this, combinationsList)
-    val spinnerItems: MutableList<String> = mutableListOf("Low", "4", "5", "6", "7", "8", "9", "10", "11", "12")
+    private val spinnerItems: MutableList<String> = mutableListOf("Low", "4", "5", "6", "7", "8", "9", "10", "11", "12")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -41,25 +48,29 @@ class GameActivity : AppCompatActivity(), GameView {
         initializeViews()
         initializeDiceButtons()
 
-        gameController = GameController(this)
-        gameController.startGame()
+        gameState = ViewModelProvider(this)[Game::class.java]
+        gameController = GameController(this, gameState)
 
-        val throwButton = findViewById<Button>(R.id.buttonThrow)
-        throwButton.setOnClickListener {
-            gameController.handleThrowButtonClick()
+        if (savedInstanceState == null) {
+            gameController.startGame()
+        } else {
+            gameController.restoreGame(gameState)
         }
-        val combinationButton = findViewById<Button>(R.id.buttonCombination)
-        combinationButton.isEnabled = false
-        combinationButton.setOnClickListener {
-            gameController.handleCombinationButtonClick()
-        }
-        val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
-        endRoundButton.isEnabled = false
-        endRoundButton.setOnClickListener {
-            gameController.endRound()
-        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle){
+        super.onSaveInstanceState(outState)
+        outState.putInt("selectedSpinnerIndex", combinationSpinner.selectedItemPosition)
 
     }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val selectedSpinnerIndex = savedInstanceState.getInt("selectedSpinnerIndex")
+        combinationSpinner.setSelection(selectedSpinnerIndex)
+
+    }
+
     private fun initializeDiceButtons() {
         diceButtons = listOf(
             findViewById<ImageButton>(R.id.dice1),
@@ -101,6 +112,22 @@ class GameActivity : AppCompatActivity(), GameView {
             Toast.makeText(this, "Removed combination: ${clickedCombination.combination}", Toast.LENGTH_SHORT).show()
             gameController.handleRemoveCombinationClick(clickedCombination)
         }
+
+        val throwButton = findViewById<Button>(R.id.buttonThrow)
+        throwButton.setOnClickListener {
+            gameController.handleThrowButtonClick()
+        }
+        val combinationButton = findViewById<Button>(R.id.buttonCombination)
+        combinationButton.isEnabled = false
+        combinationButton.setOnClickListener {
+            gameController.handleCombinationButtonClick()
+        }
+        val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
+        endRoundButton.isEnabled = false
+        endRoundButton.setOnClickListener {
+            gameController.endRound()
+        }
+
     }
     override fun removeCombinationFromSpinner(combination: String) {
         spinnerItems.remove(combination)
@@ -110,6 +137,25 @@ class GameActivity : AppCompatActivity(), GameView {
         combinationSpinner.adapter = spinnerAdapter
 
     }
+
+    override fun setCombinationSpinnerItems(combinations: MutableList<String>) {
+        spinnerItems.clear()
+        spinnerItems.addAll(combinations)
+
+        val spinnerAdapter = CombinationSpinnerAdapter(this, android.R.layout.simple_spinner_item, spinnerItems)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        combinationSpinner.adapter = spinnerAdapter
+    }
+
+    override fun endGame(score : Score) {
+        val intent = Intent(this, ResultActivity::class.java)
+
+        val scoreArray = score.toIntArray()
+        intent.putExtra("scoreArray", scoreArray)
+
+        startActivity(intent)
+    }
+
     override fun updateCombinationsList(combinations: MutableList<Combination>) {
         combinationsList.clear()
         combinationsList.addAll(combinations)
