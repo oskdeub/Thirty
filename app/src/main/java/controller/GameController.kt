@@ -11,7 +11,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
     /****************************************
      **             Round Logic            **
      ****************************************/
-
+    /**
+     *  Handles end round logic: adds score to current game. Updates UI: 'Total Score', and removes the combination that was used.
+     *  Ends the game if currentRound is the last round (10).
+     */
     fun endRound() {
         addScoreToCurrentGame(gameState.currentRoundScore)
         addRoundScoreToTotalScore()
@@ -19,11 +22,15 @@ class GameController(private val gameView: GameView, private val gameState: Game
         removeUsedCombination()
         if(gameState.currentRound == 10){
             gameView.endGame(gameState.score)
+        } else {
+            resetRound()
+            startRound()
         }
-        resetRound()
-        startRound()
     }
 
+    /**
+     * Restores game from a Game-class object. Updates the UI to correspond to the load.
+     */
     fun restoreGame(state : Game){
         Log.d("RestoreGame", "${state.currentRound}, ${state.currentRoundScore}, ${state.remainingThrows}, ${state.combinationMode},")
         gameState.load(state)
@@ -51,6 +58,9 @@ class GameController(private val gameView: GameView, private val gameState: Game
         gameState.remainingThrows = 3
     }
 
+    /**
+     * Resets round specific information and calls for UI updates. The combination inside gameState gets a fresh initialization.
+     */
     private fun resetRound() {
         gameState.currentRoundScore = 0
         resetDice()
@@ -59,6 +69,9 @@ class GameController(private val gameView: GameView, private val gameState: Game
         gameState.currentCombination = Combination()
     }
 
+    /**
+     * Increments gameState.currentRound by 1. Calls for a UI update to display the change and resets the Dice.
+     */
     private fun startRound() {
         gameState.currentRound += 1
         updateRoundNumberDisplay()
@@ -71,6 +84,11 @@ class GameController(private val gameView: GameView, private val gameState: Game
     /****************************************
      **             Dice Logic             **
      ****************************************/
+
+    /**
+     * Throw-button logic. If gameState.remainingThrows is larger than 0, a dice roll takes place, remainingThrows are decreased by 1 and a UI call is made to update remaining throws display.
+     * If remaningThrows then is 0, a UI call is made to display other options for the user.
+     */
     fun handleThrowButtonClick() {
         if (gameState.remainingThrows > 0) {
             rollDice()
@@ -81,6 +99,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
             setCombinationStageDisplay()
         }
     }
+
+    /**
+     * Dice roll logic. If the dice to be rolled is not selected nor in a combination, the dice will roll and call for an UI update of its image.
+     */
     private fun rollDice() {
         for (dice in gameState.diceList) {
             if (!dice.isSelected && !dice.inCombination) {
@@ -92,6 +114,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
             }
         }
     }
+
+    /**
+     * Reset all dice in diceList. Calls for an UI update of the dice.
+     */
     private fun resetDice() {
         for (dice in gameState.diceList) {
             dice.reset()
@@ -99,17 +125,27 @@ class GameController(private val gameView: GameView, private val gameState: Game
         }
     }
 
+    /**
+     * If remaining throws is below 3, i.e. the player has rolled at least the first roll; this function saves a clicked dice with toggleDiceSelection().
+     */
     private fun handleDiceSaveClick(index: Int) {
         if (gameState.remainingThrows < 3) {
             toggleDiceSelection(gameState.diceList[index])
         }
     }
 
+    /**
+     * if dice is selected: unselect it. If dice is not selected: select it. Update the dice image.
+     */
     private fun toggleDiceSelection(dice: Dice) {
         dice.isSelected = !dice.isSelected
         updateDiceImage(gameState.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
     }
 
+    /**
+     * Handles a dice being clicked. If the game is in combination mode, the dice gets added to the current combination.
+     * If not in combination mode, saves the dice and marks it as selected.
+     */
     fun handleDiceClick(index: Int) {
         if (gameState.combinationMode) {
             handleDiceCombinationClick(index)
@@ -123,11 +159,20 @@ class GameController(private val gameView: GameView, private val gameState: Game
             Log.d("Dice", "Dice${index + 1} saved: ${gameState.diceList[index].value}")
         }
     }
+
+    /**
+     * Resets the Dice inCombination status, and calls for the update of its UI image.
+     */
     private fun resetDiceStatus(dice: Dice) {
         dice.inCombination = false
+        dice.inCurrentCombination = false
         updateDiceImage(gameState.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
     }
 
+    /**
+     * Calculates the score of the combinations in combinationList. Only accepts combination scores which are at the target score.
+     * Updates the UI for Combination score.
+     */
     private fun updateCurrentRoundScore() {
         gameState.currentRoundScore = 0
         for (combination in gameState.combinationList) {
@@ -139,7 +184,11 @@ class GameController(private val gameView: GameView, private val gameState: Game
     /****************************************
      **       Combination Logic            **
      ****************************************/
-
+    /**
+     * Handles click event for the combination button.
+     * If clicked when not in combination mode: start the combination mode (gameState.combinationMode).
+     * If clicked when in combination mode: add the combination to combinationList.
+     */
     fun handleCombinationButtonClick() {
         toggleCombinationMode()
         if (gameState.combinationMode) {
@@ -148,23 +197,33 @@ class GameController(private val gameView: GameView, private val gameState: Game
             addCombinationToCombinationList(gameState.currentCombination)
         }
     }
-    private fun handleDiceCombinationClick(index: Int) {
+
+    /**
+     * PRE: gameState.combinationMode = true
+     * Handles clicking a dice while in combination mode. If Dice is not in currentCombination: Adds the dice to the current combination.
+     * If Dice is in currentCombination
+     */
+    private fun handleDiceCombinationClick(index: Int){
         val dice = gameState.diceList[index]
-        if (!dice.inCombination) {
-            gameState.currentCombination.addToCombinationAndScore(dice.value, index)
-            Log.d(
-                "Combination",
-                "Dice${index + 1} added to currentCombination: ${dice.value}, Indecies: ${gameState.currentCombination.diceIndecies}"
-            )
+        //Checks if the dice is in the current combination
+        if(!dice.inCombination){
+            dice.inCurrentCombination = true
             dice.inCombination = true
+            gameState.currentCombination.addToCombinationAndScore(dice.value, index)
             updateDiceImage(index, dice.value, dice.isSelected, dice.inCombination)
         } else {
-            gameState.currentCombination.removeFromCombinationAndScore(dice.value, index)
-            resetDiceStatus(dice)
+            //If dice is in currentCombination, remove it from currentCombination and update UI
+            if (dice.inCurrentCombination){
+                gameState.currentCombination.removeFromCombinationAndScore(dice.value, index)
+                resetDiceStatus(dice);
+            }
         }
     }
 
     private fun startNewCombination() {
+        for (index in gameState.currentCombination.diceIndecies){
+            gameState.diceList[index].inCurrentCombination = false
+        }
         gameState.currentCombination = Combination()
     }
 
