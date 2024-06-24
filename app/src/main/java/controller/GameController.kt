@@ -215,7 +215,7 @@ class GameController(private val gameView: GameView, private val gameState: Game
             //If dice is in currentCombination, remove it from currentCombination and update UI
             if (dice.inCurrentCombination){
                 gameState.currentCombination.removeFromCombinationAndScore(dice.value, index)
-                resetDiceStatus(dice);
+                resetDiceStatus(dice)
             }
         }
     }
