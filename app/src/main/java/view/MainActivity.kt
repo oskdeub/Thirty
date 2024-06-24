@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         }
         //val intarray = intArrayOf(10,15,20,25,10,15,20,25,10,30)
 
-
+        // A start button to launch GameActivity.
         val startButton = findViewById<Button>(R.id.buttonStart)
         startButton.setOnClickListener {
             val intent = Intent(this, GameActivity::class.java)

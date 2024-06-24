@@ -58,12 +58,18 @@ class GameActivity : AppCompatActivity(), GameView {
         }
     }
 
+    /**
+     * Saves the selected spinner item.
+     */
     override fun onSaveInstanceState(outState: Bundle){
         super.onSaveInstanceState(outState)
         outState.putInt("selectedSpinnerIndex", combinationSpinner.selectedItemPosition)
 
     }
 
+    /**
+     * Restores the selected spinner item.
+     */
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         val selectedSpinnerIndex = savedInstanceState.getInt("selectedSpinnerIndex")
@@ -71,6 +77,9 @@ class GameActivity : AppCompatActivity(), GameView {
 
     }
 
+    /**
+     * Initializes the dice buttons.
+     */
     private fun initializeDiceButtons() {
         diceButtons = listOf(
             findViewById<ImageButton>(R.id.dice1),
@@ -86,6 +95,10 @@ class GameActivity : AppCompatActivity(), GameView {
             }
         }
     }
+
+    /**
+     * Initializes the views.
+     */
     private fun initializeViews() {
 
         combinationSpinner = findViewById<Spinner>(R.id.combinationSpinner)
@@ -129,6 +142,10 @@ class GameActivity : AppCompatActivity(), GameView {
         }
 
     }
+
+    /**
+     * Removes a combination from the Spinner.
+     */
     override fun removeCombinationFromSpinner(combination: String) {
         spinnerItems.remove(combination)
         combinationSpinner = findViewById<Spinner>(R.id.combinationSpinner)
@@ -138,6 +155,9 @@ class GameActivity : AppCompatActivity(), GameView {
 
     }
 
+    /**
+     * Sets the Spinner items.
+     */
     override fun setCombinationSpinnerItems(combinations: MutableList<String>) {
         spinnerItems.clear()
         spinnerItems.addAll(combinations)
@@ -147,6 +167,9 @@ class GameActivity : AppCompatActivity(), GameView {
         combinationSpinner.adapter = spinnerAdapter
     }
 
+    /**
+     * Ends the game. Gets a score array from the Game class, and Starts the ResultActivity.
+     */
     override fun endGame(score : Score) {
         val intent = Intent(this, ResultActivity::class.java)
 
@@ -156,6 +179,9 @@ class GameActivity : AppCompatActivity(), GameView {
         startActivity(intent)
     }
 
+    /**
+     * Updates the combinations list.
+     */
     override fun updateCombinationsList(combinations: MutableList<Combination>) {
         combinationsList.clear()
         combinationsList.addAll(combinations)
@@ -163,46 +189,74 @@ class GameActivity : AppCompatActivity(), GameView {
         combinationsAdapter.notifyDataSetChanged()
     }
 
+    /**
+     * Updates the combination mode display. If inCombinationMode: "Done", else: "New Combination".
+     */
     override fun updateMarkCombinationDisplay(inCombinationMode: Boolean) {
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
         combinationButton.text = if (inCombinationMode) "Done" else "New Combination"
     }
 
+    /**
+     * Updates the combinationScoreDisplay with combinationScore.
+     */
     override fun updateCombinationScoreDisplay(combinationScore: Int) {
         val combinationScoreText = findViewById<TextView>(R.id.combinationScoreText)
         combinationScoreText.text = combinationScore.toString()
     }
 
+    /**
+     * Toggles throwButton.
+     */
     override fun updateThrowButtonEnabled(enabled: Boolean) {
         val throwButton = findViewById<Button>(R.id.buttonThrow)
         throwButton.isEnabled = enabled
     }
 
+    /**
+     * Toggles combinationButton.
+     */
     override fun updateMarkCombinationButtonEnabled(enabled: Boolean) {
         val combinationButton = findViewById<Button>(R.id.buttonCombination)
         combinationButton.isEnabled = enabled
     }
 
+    /**
+     * toggles endRoundButton.
+     */
     override fun updateEndRoundButtonEnabled(enabled: Boolean) {
         val endRoundButton = findViewById<Button>(R.id.buttonEndRound)
         endRoundButton.isEnabled = enabled
     }
 
+    /**
+     * Updates the round number display.
+     */
     override fun updateRoundNumberDisplay(roundNumber: Int) {
         val roundNumberText = findViewById<TextView>(R.id.roundNumberText)
         roundNumberText.text = roundNumber.toString()
     }
 
+    /**
+     * Updates the score display.
+     */
     override fun updateScoreDisplay(newScore: Int) {
         val scoreText = findViewById<TextView>(R.id.scoreText)
         scoreText.text = newScore.toString()
     }
 
+    /**
+     * Updates the "throws left" display.
+     */
     override fun updateThrowsDisplay(throwsLeft: Int) {
         val throwButton = findViewById<Button>(R.id.buttonThrow)
         val throwButtonText = "Throw ($throwsLeft)"
         throwButton.text = throwButtonText
     }
+
+    /**
+     * Updates the dice to combination color.
+     */
     private fun setDiceCombinationImage(diceIndex: Int, diceValue: Int) {
         val imageResource = when (diceValue) {
             1 -> R.drawable.red1
@@ -215,6 +269,10 @@ class GameActivity : AppCompatActivity(), GameView {
         }
         diceButtons[diceIndex].setImageResource(imageResource)
     }
+
+    /**
+     * Updates the dice to standard color.
+     */
     private fun setDiceImage(diceIndex: Int, diceValue: Int) {
         val imageResource = when (diceValue) {
             1 -> R.drawable.white1
@@ -227,6 +285,10 @@ class GameActivity : AppCompatActivity(), GameView {
         }
         diceButtons[diceIndex].setImageResource(imageResource)
     }
+
+    /**
+     * Updaates the dice to selected color.
+     */
     private fun setDiceSelectedImage(diceIndex: Int, diceValue: Int){
         val imageResource = when (diceValue) {
             1 -> R.drawable.grey1
@@ -239,6 +301,10 @@ class GameActivity : AppCompatActivity(), GameView {
         }
         diceButtons[diceIndex].setImageResource(imageResource)
     }
+
+    /**
+     * Updates the dice image based on its state. inCombination has precedence over selected.
+     */
     override fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean ){
 
         if (inCombination){

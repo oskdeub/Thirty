@@ -20,6 +20,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
         addRoundScoreToTotalScore()
         updateScoreDisplay()
         removeUsedCombination()
+        if(gameState.combinationMode){
+            toggleCombinationMode()
+        }
+
         if(gameState.currentRound == 10){
             gameView.endGame(gameState.score)
         } else {
@@ -220,6 +224,11 @@ class GameController(private val gameView: GameView, private val gameState: Game
         }
     }
 
+    /**
+     * PRE: gameState.combinationMode = true
+     * Sets dice inCombination status to false for all dice in currentCombination.
+     * Gives currentCombination a freshed initialization.
+     */
     private fun startNewCombination() {
         for (index in gameState.currentCombination.diceIndecies){
             gameState.diceList[index].inCurrentCombination = false
@@ -227,11 +236,17 @@ class GameController(private val gameView: GameView, private val gameState: Game
         gameState.currentCombination = Combination()
     }
 
+    /**
+     * Toggles combinationMode. Updates UI.
+     */
     private fun toggleCombinationMode() {
         gameState.combinationMode = !gameState.combinationMode
         toggleCombinationDisplay()
     }
 
+    /**
+     * Adds combination to combinationList if score is above 0, i.e. if the combination is not empty.
+     */
     private fun addCombinationToCombinationList(combination: Combination) {
         if (combination.score > 0) {
             gameState.combinationList.add(combination)
@@ -241,11 +256,18 @@ class GameController(private val gameView: GameView, private val gameState: Game
         } //Else throw away combination?
     }
 
+    /**
+     * Handles click event to delete a combination from the combination list.
+     */
     fun handleRemoveCombinationClick(clickedCombination: Combination) {
         removeCombinationFromCombinationList(clickedCombination)
         updateCombinationsList()
         Log.d("Combination", "Combination removed: $clickedCombination")
     }
+
+    /**
+     * Removes the used combination from the list of combinations (target scores) used in the Spinner.
+     */
     private fun removeUsedCombination() {
         if (gameState.targetScore == 3) {
             removeCombinationFromSpinner("Low")
@@ -253,6 +275,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
             removeCombinationFromSpinner(gameState.targetScore.toString())
         }
     }
+
+    /**
+     * Removes combination from the combination list and updates UI. Resets the dice UI of the affected dice.
+     */
     private fun removeCombinationFromCombinationList(combination: Combination) {
         gameState.combinationList.remove(combination)
         updateCurrentRoundScore()
@@ -262,6 +288,9 @@ class GameController(private val gameView: GameView, private val gameState: Game
         }
     }
 
+    /**
+     * Handles click event for the mark combination button. Sets the target score for the current round.
+     */
     fun handleCombinationSelect(selectedCombination: String?) {
         gameState.targetScore = when (selectedCombination) {
             "Low" -> {
@@ -310,6 +339,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
         }
         updateCurrentRoundScore()
     }
+
+    /**
+     * Adds currentRoundScore to the selected targetScore.
+     */
     private fun addScoreToCurrentGame(currentRoundScore: Int) {
         when (gameState.targetScore) {
             3 -> {

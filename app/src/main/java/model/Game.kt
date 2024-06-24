@@ -2,6 +2,15 @@ package model
 
 import androidx.lifecycle.ViewModel
 
+/**
+ * Game class stores game state. Also used in resuming a game, when the app reenters the foreground.
+ * currentRound : Current round number
+ * combinationStringList : List of combinations for the Spinner
+ * combinationMode : Sets the combination mode: User can select a combination by pressing the Dice.
+ * currentCombination : Current combination of selected dice, from using the "New Combination"-button until pressing "Done", the marked Dice are in currentCombination.
+ * targetScore : Selected combination from the Spinner sets the target score.
+ * currentRoundScore : Score of the current round, based on targetScore.
+ */
 class Game : ViewModel() {
     fun load(state: Game) {
         this.currentRound = state.currentRound
