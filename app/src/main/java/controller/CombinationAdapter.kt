@@ -9,11 +9,14 @@ import android.widget.TextView
 import model.Combination
 import se.umu.cs.seod0005.thirty.R
 
+/**
+ * Used in displaying the user-chosen combinations in a ListView.
+ */
 class CombinationAdapter(
     private val context: Context,
     private val combinations: MutableList<Combination>
 ) : BaseAdapter() {
-
+    //Referens: Delvis autogenererad med BaseAdapter och Gemini. Metoder från BaseAdapter har jag inte manipulerat. Endast getView har jag ändrat i.
     override fun getCount(): Int {
         return combinations.size
     }
@@ -33,12 +36,8 @@ class CombinationAdapter(
     ): View {
         val view: View = convertView ?: LayoutInflater.from(context)
             .inflate(R.layout.combination_item, parent, false)
-        // R.layout.combination_item is your layout for a single combination item
 
         val combination = combinations[position]
-
-        // Populate the views in your combination_item layout with data from 'combination'
-        // Example:
         val combinationTextView = view.findViewById<TextView>(R.id.combinationTextView)
         combinationTextView.text = combination.combination.toString()
         val combinationItemScoreText = view.findViewById<TextView>(R.id.combinationItemScoreText)

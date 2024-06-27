@@ -293,49 +293,17 @@ class GameController(private val gameView: GameView, private val gameState: Game
      */
     fun handleCombinationSelect(selectedCombination: String?) {
         gameState.targetScore = when (selectedCombination) {
-            "Low" -> {
-                3
-            }
-
-            "4" -> {
-                4
-            }
-
-            "5" -> {
-                5
-            }
-
-            "6" -> {
-                6
-            }
-
-            "7" -> {
-                7
-            }
-
-            "8" -> {
-                8
-            }
-
-            "9" -> {
-                9
-            }
-
-            "10" -> {
-                10
-            }
-
-            "11" -> {
-                11
-            }
-
-            "12" -> {
-                12
-            }
-
-            else -> {
-                0
-            }
+            "Low" -> { 3 }
+            "4" -> { 4 }
+            "5" -> { 5 }
+            "6" -> { 6 }
+            "7" -> { 7 }
+            "8" -> { 8 }
+            "9" -> { 9 }
+            "10" -> { 10 }
+            "11" -> { 11 }
+            "12" -> { 12 }
+            else -> { 0 }
         }
         updateCurrentRoundScore()
     }
@@ -345,51 +313,23 @@ class GameController(private val gameView: GameView, private val gameState: Game
      */
     private fun addScoreToCurrentGame(currentRoundScore: Int) {
         when (gameState.targetScore) {
-            3 -> {
-                gameState.score.low = currentRoundScore
-            }
-
-            4 -> {
-                gameState.score.four = currentRoundScore
-            }
-
-            5 -> {
-                gameState.score.five = currentRoundScore
-            }
-
-            6 -> {
-                gameState.score.six = currentRoundScore
-            }
-
-            7 -> {
-                gameState.score.seven = currentRoundScore
-            }
-
-            8 -> {
-                gameState.score.eight = currentRoundScore
-            }
-
-            9 -> {
-                gameState.score.nine = currentRoundScore
-            }
-
-            10 -> {
-                gameState.score.ten = currentRoundScore
-            }
-
-            11 -> {
-                gameState.score.eleven = currentRoundScore
-            }
-
-            12 -> {
-                gameState.score.twelve = currentRoundScore
-            }
+            3 -> { gameState.score.low = currentRoundScore }
+            4 -> { gameState.score.four = currentRoundScore }
+            5 -> { gameState.score.five = currentRoundScore }
+            6 -> { gameState.score.six = currentRoundScore }
+            7 -> { gameState.score.seven = currentRoundScore }
+            8 -> { gameState.score.eight = currentRoundScore }
+            9 -> { gameState.score.nine = currentRoundScore }
+            10 -> { gameState.score.ten = currentRoundScore }
+            11 -> { gameState.score.eleven = currentRoundScore }
+            12 -> { gameState.score.twelve = currentRoundScore }
         }
     }
 
     /****************************************
      **         gameView functions         **
      ****************************************/
+    /* Calling UI updates and changes through gameView into GameActivity. */
 
     private fun updateDiceImage(index: Int, value: Int, isSelected: Boolean, inCombination: Boolean) {
         gameView.updateDiceImage(index, value, isSelected, inCombination)
