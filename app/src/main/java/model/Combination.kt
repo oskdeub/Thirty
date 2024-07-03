@@ -5,11 +5,12 @@ package model
  * Combination class stores a combination of dice. The dice values of a combination are stored in combination. The dice indecies of a combination are stored in diceIndecies.
  * If the score is at target (selected in the combination Spinner) scoreAtTarget is true (must invoke calculateScoreForTarget().
  */
-class Combination {
+class Combination() {
     var combination : MutableList<Int> = mutableListOf()
     var diceIndecies : MutableList<Int> = mutableListOf()
     var score : Int = 0
     var scoreAtTarget : Boolean = false
+
 
     /**
      * Adds number to combination, and diceIndex to diceIndecies. Updates the score of the combinaiton.
@@ -49,6 +50,26 @@ class Combination {
         combination.remove(value)
         diceIndecies.remove(index)
         score -= value
+    }
+
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            "combination" to combination.toList(),
+            "diceIndecies" to diceIndecies.toList(),
+            "score" to score,
+            "scoreAtTarget" to scoreAtTarget
+        )
+    }
+
+    companion object {
+        fun fromMap(map: Map<String, Any>): Combination {
+            val combination = Combination()
+            combination.combination = (map["combination"] as List<Int>).toMutableList()
+            combination.diceIndecies = (map["diceIndecies"] as List<Int>).toMutableList()
+            combination.score = map["score"] as Int
+            combination.scoreAtTarget = map["scoreAtTarget"] as Boolean
+            return combination
+        }
     }
 }
 

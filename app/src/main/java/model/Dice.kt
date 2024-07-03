@@ -21,11 +21,33 @@ class Dice {
         inCombination = false
         inCurrentCombination = false
     }
-
+    fun getDiceState(): BooleanArray {
+        return arrayOf(isSelected, inCombination, inCurrentCombination).toBooleanArray();
+    }
     /**
      * Rolls the Dice.
      */
     fun roll(){
         value = (1..6).random()
+    }
+
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            "value" to value,
+            "isSelected" to isSelected,
+            "inCombination" to inCombination,
+            "inCurrentCombination" to inCurrentCombination
+        )
+    }
+
+    companion object {
+        fun fromMap(map: Map<String, Any>): Dice {
+            val dice = Dice()
+            dice.value = map["value"] as Int
+            dice.isSelected = map["isSelected"] as Boolean
+            dice.inCombination = map["inCombination"] as Boolean
+            dice.inCurrentCombination = map["inCurrentCombination"] as Boolean
+            return dice
+        }
     }
 }

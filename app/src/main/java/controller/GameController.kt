@@ -37,7 +37,7 @@ class GameController(private val gameView: GameView, private val gameState: Game
      */
     fun restoreGame(state : Game){
         Log.d("RestoreGame", "${state.currentRound}, ${state.currentRoundScore}, ${state.remainingThrows}, ${state.combinationMode},")
-        gameState.load(state)
+        //gameState.load(state)
         updateCurrentRoundScore()
         updateThrowsDisplay()
         updateCombinationScoreDisplay()
@@ -46,10 +46,10 @@ class GameController(private val gameView: GameView, private val gameState: Game
         updateCombinationsList()
         Log.d("gameState", "${state.remainingThrows}, ${state.combinationMode}")
         setCombinationStringList()
-        for(dice in gameState.diceList){
-            updateDiceImage(gameState.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
+        for(dice in state.diceList){
+            updateDiceImage(state.diceList.indexOf(dice), dice.value, dice.isSelected, dice.inCombination)
         }
-        if(gameState.remainingThrows == 0){
+        if(state.remainingThrows == 0){
             setCombinationStageDisplay()
         }
     }

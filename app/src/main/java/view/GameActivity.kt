@@ -58,11 +58,40 @@ class GameActivity : AppCompatActivity(), GameView {
         }
     }
 
+    /*
+    Vid tillfällen då appens process avslutas, återställs spelet. Detta innebär att alla spelade rundor och poäng försvinner.
+    För att hantera detta korrekt behöver du bevara tillståndet mellan processavslutningar.
+    Testa detta genom att aktivera utvecklarinställningen “Don’t keep activities” och sedan gå ut ur appen och tillbaka in (på annat sätt än att använda back-knappen).
+    Tillståndet bör vara oförändrat. Kommentar med * behöver fixas för godkänt.
+     */
+
     /**
      * Saves the selected spinner item.
      */
     override fun onSaveInstanceState(outState: Bundle){
         super.onSaveInstanceState(outState)
+
+        /*outState.putInt("currentRound", gameState.currentRound)
+        outState.putInt("remainingThrows", gameState.remainingThrows)
+        outState.putIntArray("score", gameState.score.toIntArray())
+        outState.putStringArrayList("combinationStringList", ArrayList(gameState.combinationStringList))
+
+        val diceValues = gameState.diceList.map { it.value }.toIntArray()
+        val diceSelected = gameState.diceList.map { it.isSelected }.toBooleanArray()
+        val diceInCombination = gameState.diceList.map { it.inCombination }.toBooleanArray()
+        val diceInCurrentcombination = gameState.diceList.map { it.inCurrentCombination }.toBooleanArray()
+        outState.putIntArray("diceValues", diceValues)
+        outState.putBooleanArray("diceSelected", diceSelected)
+        outState.putBooleanArray("diceInCombination", diceInCombination)
+        outState.putBooleanArray("diceInCurrentCombination", diceInCurrentcombination)
+
+        outState.putBoolean("combinationMode", gameState.combinationMode)
+
+        val combinationCombinations = gameState.combinationList.map { it.combination.toIntArray() }*/
+
+
+
+
         outState.putInt("selectedSpinnerIndex", combinationSpinner.selectedItemPosition)
 
     }
