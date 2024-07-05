@@ -675,11 +675,11 @@ class GameActivity : AppCompatActivity(){
     private fun updateDiceImage(diceIndex: Int, diceValue: Int, selected: Boolean, inCombination: Boolean ){
 
         if (inCombination){
-            setDiceCombinationImage(diceIndex, diceValue);
+            setDiceCombinationImage(diceIndex, diceValue)
             return
         }
         if (!selected){
-            setDiceImage(diceIndex, diceValue);
+            setDiceImage(diceIndex, diceValue)
             return
 
         } else {

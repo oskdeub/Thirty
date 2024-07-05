@@ -56,7 +56,6 @@ class Combination : Parcelable {
 
     fun getCombinationString() : String{
         var combinationString : String = ""
-        var i : Int = 0
         for (c in combination) {
             combinationString += "$c, "
         }
