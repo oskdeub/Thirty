@@ -43,7 +43,7 @@ class ResultActivity : AppCompatActivity() {
         // Restarts the game.
         val tryAgainButton = findViewById<Button>(R.id.tryAgainButton)
         tryAgainButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
     }

@@ -39,7 +39,7 @@ class CombinationAdapter(
 
         val combination = combinations[position]
         val combinationTextView = view.findViewById<TextView>(R.id.combinationTextView)
-        combinationTextView.text = combination.combination.toString()
+        combinationTextView.text = combination.getCombinationString()
         val combinationItemScoreText = view.findViewById<TextView>(R.id.combinationItemScoreText)
         combinationItemScoreText.text = combination.score.toString()
 

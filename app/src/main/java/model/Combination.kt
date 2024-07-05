@@ -1,22 +1,34 @@
 package model
 
+import android.os.Parcel
+import android.os.Parcelable
+
 
 /**
  * Combination class stores a combination of dice. The dice values of a combination are stored in combination. The dice indecies of a combination are stored in diceIndecies.
  * If the score is at target (selected in the combination Spinner) scoreAtTarget is true (must invoke calculateScoreForTarget().
  */
-class Combination {
-    var combination : MutableList<Int> = mutableListOf()
-    var diceIndecies : MutableList<Int> = mutableListOf()
+class Combination : Parcelable {
+    var combination : IntArray = intArrayOf()
+    var diceIndecies : IntArray = intArrayOf()
     var score : Int = 0
     var scoreAtTarget : Boolean = false
 
+    constructor() {}
+
+    private constructor(parcel: Parcel) {
+        score = parcel.readInt()
+        scoreAtTarget = parcel.readByte() != 0.toByte()
+        combination = parcel.createIntArray() ?: intArrayOf()
+        diceIndecies = parcel.createIntArray() ?: intArrayOf()
+
+    }
     /**
      * Adds number to combination, and diceIndex to diceIndecies. Updates the score of the combinaiton.
      */
     fun addToCombinationAndScore(number: Int, diceIndex: Int) {
-        combination.add(number)
-        diceIndecies.add(diceIndex)
+        combination += number
+        diceIndecies += diceIndex
         score += number
     }
 
@@ -42,13 +54,50 @@ class Combination {
         }
     }
 
+    fun getCombinationString() : String{
+        var combinationString : String = ""
+        var i : Int = 0
+        for (c in combination) {
+            combinationString += "$c, "
+        }
+        //Remove the trailing comma and space
+        combinationString = combinationString.removeSuffix(' '.toString())
+        combinationString = combinationString.removeSuffix(','.toString())
+
+        return combinationString
+    }
+
     /**
      * Removes a number from combination and diceIndecies. Updates the score of the combinaiton.
      */
     fun removeFromCombinationAndScore(value: Int, index: Int) {
-        combination.remove(value)
-        diceIndecies.remove(index)
+        val newCombination = combination.toMutableList()
+        newCombination.remove(value)
+        combination = newCombination.toIntArray()
+
+        diceIndecies = diceIndecies.filter { it != index }.toIntArray()
         score -= value
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeInt(score)
+        dest.writeByte(if (scoreAtTarget) 1.toByte() else 0.toByte())
+        dest.writeIntArray(combination)
+        dest.writeIntArray(diceIndecies)
+    }
+
+    companion object CREATOR : Parcelable.Creator<Combination> {
+        override fun createFromParcel(parcel: Parcel): Combination {
+            return Combination(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Combination?> {
+            return arrayOfNulls(size)
+        }
     }
 }
 
