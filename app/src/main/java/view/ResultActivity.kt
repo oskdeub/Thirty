@@ -3,11 +3,9 @@ package view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -25,8 +23,6 @@ class ResultActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        //TODO: Place Try Again button at bottom of screen
-        //TODO: Move Result Text to top of screen
 
         val scoreArray = intent.getIntArrayExtra("scoreArray")!!
         Log.d("scoreArray", scoreArray.toString())
@@ -42,9 +38,10 @@ class ResultActivity : AppCompatActivity() {
         val totalScoreLabel = findViewById<TextView>(R.id.totalScore)
         totalScoreLabel.text = totalScore.toString()
 
+        // Restarts the game.
         val tryAgainButton = findViewById<Button>(R.id.tryAgainButton)
         tryAgainButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }
     }
